@@ -17,6 +17,8 @@ import moment from "moment"
 const { Search } = Input
 const { Text, Title } = Typography
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || "";
+
 const Notes = () => {
   const [notes, setNotes] = useState([])
   const [filteredNotes, setFilteredNotes] = useState([])
@@ -35,7 +37,7 @@ const Notes = () => {
 
   const fetchNotes = async () => {
     try {
-      const response = await axios.get("/api/notes")
+      const response = await axios.get(`${API_BASE_URL}/api/notes`)
       setNotes(response.data)
     } catch (error) {
       message.error("Failed to fetch notes")
@@ -60,7 +62,7 @@ const Notes = () => {
 
   const handleCreateNote = async (noteData) => {
     try {
-      const response = await axios.post("/api/notes", noteData)
+      const response = await axios.post(`${API_BASE_URL}/api/notes`, noteData)
       setNotes([response.data, ...notes])
       message.success("Note created successfully!")
     } catch (error) {
@@ -70,7 +72,7 @@ const Notes = () => {
 
   const handleEditNote = async (noteId, noteData) => {
     try {
-      const response = await axios.put(`/api/notes/${noteId}`, noteData)
+      const response = await axios.put(`${API_BASE_URL}/api/notes/${noteId}`, noteData)
       setNotes(notes.map((note) => (note._id === noteId ? response.data : note)))
       message.success("Note updated successfully!")
     } catch (error) {
@@ -86,7 +88,7 @@ const Notes = () => {
       okType: "danger",
       onOk: async () => {
         try {
-          await axios.delete(`/api/notes/${noteId}`)
+          await axios.delete(`${API_BASE_URL}/api/notes/${noteId}`)
           setNotes(notes.filter((note) => note._id !== noteId))
           message.success("Note deleted successfully!")
         } catch (error) {
@@ -99,7 +101,7 @@ const Notes = () => {
   const handlePinNote = async (noteId, isPinned) => {
     try {
       const note = notes.find((n) => n._id === noteId)
-      const response = await axios.put(`/api/notes/${noteId}`, {
+      const response = await axios.put(`${API_BASE_URL}/api/notes/${noteId}`, {
         ...note,
         isPinned: !isPinned,
       })

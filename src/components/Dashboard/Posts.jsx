@@ -20,6 +20,8 @@ import moment from "moment"
 const { TextArea } = Input
 const { Text, Paragraph } = Typography
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || "";
+
 const Posts = () => {
   const [posts, setPosts] = useState([])
   const [loading, setLoading] = useState(true)
@@ -34,7 +36,7 @@ const Posts = () => {
 
   const fetchPosts = async () => {
     try {
-      const response = await axios.get("/api/posts")
+      const response = await axios.get(`${API_BASE_URL}/api/posts`)
       setPosts(response.data)
     } catch (error) {
       message.error("Failed to fetch posts")
@@ -45,7 +47,7 @@ const Posts = () => {
 
   const handleCreatePost = async (content) => {
     try {
-      const response = await axios.post("/api/posts", { content })
+      const response = await axios.post(`${API_BASE_URL}/api/posts`, { content })
       setPosts([response.data, ...posts])
       message.success("Post created successfully!")
     } catch (error) {
@@ -55,7 +57,7 @@ const Posts = () => {
 
   const handleEditPost = async (postId, content) => {
     try {
-      const response = await axios.put(`/api/posts/${postId}`, { content })
+      const response = await axios.put(`${API_BASE_URL}/api/posts/${postId}`, { content })
       setPosts(posts.map((post) => (post._id === postId ? response.data : post)))
       message.success("Post updated successfully!")
     } catch (error) {
@@ -71,7 +73,7 @@ const Posts = () => {
       okType: "danger",
       onOk: async () => {
         try {
-          await axios.delete(`/api/posts/${postId}`)
+          await axios.delete(`${API_BASE_URL}/api/posts/${postId}`)
           setPosts(posts.filter((post) => post._id !== postId))
           message.success("Post deleted successfully!")
         } catch (error) {
@@ -83,7 +85,7 @@ const Posts = () => {
 
   const handleLike = async (postId) => {
     try {
-      const response = await axios.post(`/api/posts/${postId}/like`)
+      const response = await axios.post(`${API_BASE_URL}/api/posts/${postId}/like`)
       setPosts(posts.map((post) => (post._id === postId ? response.data : post)))
     } catch (error) {
       message.error(error.response?.data?.message || "Failed to like post")
@@ -95,7 +97,7 @@ const Posts = () => {
     if (!content?.trim()) return
 
     try {
-      const response = await axios.post(`/api/posts/${postId}/comment`, { content })
+      const response = await axios.post(`${API_BASE_URL}/api/posts/${postId}/comment`, { content })
       setPosts(posts.map((post) => (post._id === postId ? response.data : post)))
       setCommentInputs({ ...commentInputs, [postId]: "" })
       message.success("Comment added!")
@@ -204,7 +206,7 @@ const Posts = () => {
                             size="small"
                             onClick={async () => {
                               try {
-                                await axios.delete(`/api/posts/${post._id}/comments/${comment._id}`);
+                                await axios.delete(`${API_BASE_URL}/api/posts/${post._id}/comments/${comment._id}`);
                                 setPosts(posts.map((p) =>
                                   p._id === post._id
                                     ? { ...p, comments: p.comments.filter((c) => c._id !== comment._id) }

@@ -31,9 +31,11 @@ const Users = () => {
     }
   }, [user])
 
+  const API_BASE_URL = import.meta.env.VITE_API_URL || "";
+
   const fetchUsers = async () => {
     try {
-      const response = await axios.get("/api/users")
+      const response = await axios.get(`${API_BASE_URL}/api/users`)
       setUsers(response.data)
     } catch (error) {
       message.error("Failed to fetch users")
@@ -58,7 +60,7 @@ const Users = () => {
 
   const handleFollow = async (userId) => {
     try {
-      const response = await axios.post(`/api/users/${userId}/follow`)
+      const response = await axios.post(`${API_BASE_URL}/api/users/${userId}/follow`)
       const isNowFollowing = response.data.isFollowing
 
       if (isNowFollowing) {

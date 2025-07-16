@@ -35,7 +35,8 @@ const Profile = () => {
     const fetchFollowData = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("/api/users/me/follow", {
+        const API_BASE_URL = import.meta.env.VITE_API_URL || "";
+        const res = await axios.get(`${API_BASE_URL}/api/users/me/follow`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setFollowers(res.data.followers);
@@ -49,7 +50,8 @@ const Profile = () => {
 
   const fetchUserStats = async () => {
     try {
-      const response = await axios.get(`/api/users/${user._id}`)
+      const API_BASE_URL = import.meta.env.VITE_API_URL || "";
+      const response = await axios.get(`${API_BASE_URL}/api/users/${user._id}`)
       const { user: userData, posts } = response.data
       setUserStats({
         postsCount: posts.length,
@@ -64,7 +66,8 @@ const Profile = () => {
   const handleSave = async () => {
     setLoading(true)
     try {
-      const response = await axios.put("/api/users/profile", { bio, avatar })
+      const API_BASE_URL = import.meta.env.VITE_API_URL || "";
+      const response = await axios.put(`${API_BASE_URL}/api/users/profile`, { bio, avatar })
       updateUser(response.data)
       setEditing(false)
       message.success("Profile updated successfully!")
