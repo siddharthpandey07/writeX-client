@@ -42,7 +42,6 @@ const Profile = () => {
         setFollowers(res.data.followers);
         setFollowing(res.data.following);
       } catch (err) {
-        // handle error
       }
     };
     fetchFollowData();

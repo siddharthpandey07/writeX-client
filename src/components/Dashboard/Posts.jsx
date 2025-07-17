@@ -110,9 +110,7 @@ const Posts = () => {
     return post.likes.some((like) => like.user === user._id)
   }
 
-  // Returns true if the user can interact (like/comment) with the post
   const canInteract = (post) => {
-    // Allow if user is following the author, is a follower, or is the author
     return true;
   }
 

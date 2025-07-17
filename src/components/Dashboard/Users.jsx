@@ -71,7 +71,6 @@ const Users = () => {
         setFollowingUsers(newFollowing)
       }
 
-      // Update user context
       const updatedUser = {
         ...user,
         following: isNowFollowing
